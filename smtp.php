@@ -1,13 +1,14 @@
- <?php
-session_start();
-error_reporting(0);
+<?php
+/**
+ * This example shows making an SMTP connection with authentication.
+ */
 
-include 'PHPMailerAutoload.php';
-function sendMail($toemail,$message,$subject)
-{
-$hostwebsite=$_SERVER['HTTP_HOST'];
-$fromName=$hostwebsite;
-//mail($toemail, $subject, $message, $headers);
+//SMTP needs accurate times, and the PHP time zone MUST be set
+//This should be done in your php.ini, but this is how to do it if you don't have access to that
+date_default_timezone_set('Etc/UTC');
+
+require 'PHPMailerAutoload.php';
+
 //Create a new PHPMailer instance
 $mail = new PHPMailer;
 //Tell PHPMailer to use SMTP
@@ -20,43 +21,32 @@ $mail->SMTPDebug = 2;
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
 //Set the hostname of the mail server
-$mail->Host = "mail.tpdalert.com";
+$mail->Host = "mail.wellesbowen.com";
 //Set the SMTP port number - likely to be 25, 465 or 587
-$mail->Port =587;
-$mail->IsHTML=false;
+$mail->Port = 25;
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 //Username to use for SMTP authentication
-$mail->Username = "mailadmin";
+$mail->Username = "leads@wellesbowen.com";
 //Password to use for SMTP authentication
-$mail->Password = "6JVqY@gR";
+$mail->Password = "webleads";
 //Set who the message is to be sent from
-
-//$mail->setFrom('leads@wellesbowen.com', $fromName);
-
- $mail->FromName = "Alertizen Alert";
- $mail->From = 'noreply@tpdalert.com';
-
+$mail->setFrom('noreply@wellesbowen.com', 'Welles');
 //Set an alternative reply-to address
 
 //$mail->addReplyTo('replyto@example.com', 'First Last');
 
 //Set who the message is to be sent to
-
-//$mail->addAddress($toemail, $toemail);
-
-$mail->addAddress('jzahn@gutconsulting.com');
-//$mail->addCC('');
-//$mail->addBCC('toledo@accesstoledo.com', 'Dave');
-
+$mail->addAddress('laxsharma123@gmail.com', 'Laxmikant');
+$mail->addCC('leads@wellesbowen.com', 'Welles Bowen');
+$mail->addBCC('toledo@accesstoledo.com', 'Dave');
 //Set the subject line
-$mail->Subject = $subject;
+$mail->Subject = 'Request More Info';
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
-$mail->msgHTML($message);
+$mail->msgHTML('Tested by Development team');
 //Replace the plain text body with one created manually
-
-//$mail->AltBody = 'This is a plain-text message body';
+$mail->AltBody = 'This is a plain-text message body';
 //Attach an image file
 
 //$mail->addAttachment('images/phpmailer_mini.png');
@@ -67,12 +57,3 @@ if (!$mail->send()) {
 } else {
     echo "Message sent!";
 }
-
-}
-
-$wellesEmail="jzahn@gutconsulting.com";
-$emailMsg="Test message using tpdalert.org mail server";
-$subject="Test with new alertizen SMTP email!";
-
-$status=sendMail($wellesEmail,$emailMsg,$subject);
-?>
